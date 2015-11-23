@@ -32,7 +32,7 @@ from solar_agent.logger import logger
 #     return [x[0] for x in takewhile(lambda x: all(n == x[0] for n in x[1:]), dirs)]
 
 
-# class SolardContext(object):
+# class SolarAgentContext(object):
 
 #     def __init__(self):
 #         self._dirs = {}
@@ -43,9 +43,9 @@ from solar_agent.logger import logger
 #             return self._files[path]
 #         except KeyError:
 #             if self.is_safe_file(path):
-#                 cls = SolardSafeFile
+#                 cls = SolarAgentSafeFile
 #             else:
-#                 cls = SolardFile
+#                 cls = SolarAgentFile
 #             self._files[path] = f = cls(self, path)
 #         return f
 
@@ -53,18 +53,18 @@ from solar_agent.logger import logger
 #         try:
 #             return self._dirs[path]
 #         except KeyError:
-#             self._dirs[path] = solar_agent_dir = SolardDir(self, path)
+#             self._dirs[path] = solar_agent_dir = SolarAgentDir(self, path)
 #         return solar_agent_dir
 
 #     def is_safe_file(self, path):
 #         dirname = os.path.dirname(path)
-#         common = SolardContext.common_path(dirname, self._dirs.keys())
+#         common = SolarAgentContext.common_path(dirname, self._dirs.keys())
 #         if common not in ((), ('/', )):
 #             return False
 #         return True
 
 #     def is_safe_dir(self, path):
-#         common = SolardContext.common_path(path, self._dirs.keys())
+#         common = SolarAgentContext.common_path(path, self._dirs.keys())
 #         if common not in ((), ('/', )):
 #             return False
 #         return True
@@ -77,7 +77,7 @@ from solar_agent.logger import logger
 #         return tuple(x[0] for x in takewhile(lambda x: all(n == x[0] for n in x[1:]), dirs))
 
 
-# class SolardSafeFile(object):
+# class SolarAgentSafeFile(object):
 
 #     def __init__(self, context, target):
 #         self._f = None
@@ -99,7 +99,7 @@ from solar_agent.logger import logger
 #         os.rename(self._safe_path, self._path)
 
 
-# class SolardFile(object):
+# class SolarAgentFile(object):
 
 #     def __init__(self, context, target):
 #         self._f = None
@@ -118,7 +118,7 @@ from solar_agent.logger import logger
 #         self.close()
 
 
-# class SolardSafeDir(object):
+# class SolarAgentSafeDir(object):
 
 #     def __init__(self, context, target):
 #         self._rnd = 'solar' + ''.join((random.choice(string.ascii_lowercase) for _ in xrange(6)))
@@ -132,7 +132,7 @@ from solar_agent.logger import logger
 #         os.rename(self._safe_path, self._path)
 
 
-# class SolardDir(object):
+# class SolarAgentDir(object):
 
 #     def __init__(self, context, target):
 #         self._path = target
@@ -145,7 +145,7 @@ from solar_agent.logger import logger
 
 # XXX: not used for now ^^^
 
-class SolardContext(object):
+class SolarAgentContext(object):
 
     def __init__(self):
         self.files = {}
@@ -154,11 +154,11 @@ class SolardContext(object):
         try:
             return self.files[path]
         except KeyError:
-            self.files[path] = r = SolardFile(self, path)
+            self.files[path] = r = SolarAgentFile(self, path)
         return r
 
 
-class SolardFile(object):
+class SolarAgentFile(object):
 
     def __init__(self, context, target):
         self.ctx = context
@@ -183,7 +183,7 @@ class SolardFile(object):
         os.rename(self._safe_path, self._path)
 
 
-class SolardIface(object):
+class SolarAgentIface(object):
 
     @staticmethod
     def run(solar_agent_context, cmd, **kwargs):
@@ -216,11 +216,11 @@ class SolardIface(object):
 
     @staticmethod
     def copy_file(solar_agent_context, stream_reader, path, size=None):
-        f = SolardIface.file_start(solar_agent_context, path)
+        f = SolarAgentIface.file_start(solar_agent_context, path)
         rdr = stream_reader(size)
         for data in rdr:
             f.write(data)
-        SolardIface.file_end(solar_agent_context, path)
+        SolarAgentIface.file_end(solar_agent_context, path)
         return True
 
     @staticmethod
@@ -228,12 +228,12 @@ class SolardIface(object):
         # total_size not used for now
         for _to, _size in paths:
             logger.debug("Starting %s size=%d", _to, _size)
-            f = SolardIface.file_start(solar_agent_context, _to)
+            f = SolarAgentIface.file_start(solar_agent_context, _to)
             if _size > 0:
                 rdr = stream_reader(_size)
                 for data in rdr:
                     f.write(data)
-            SolardIface.file_end(solar_agent_context, _to)
+            SolarAgentIface.file_end(solar_agent_context, _to)
             logger.debug("Done %s size=%d", _to, _size)
         return True
 

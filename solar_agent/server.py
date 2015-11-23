@@ -17,8 +17,8 @@ def validate_class(ctx, param, value):
 @click.option('--port', default=5555, type=int)
 def run(base, port):
     if base == 'tcp':
-        from solar_agent.tcp_server import SolardTCPServer
-        runner = SolardTCPServer.run_solar_agent
+        from solar_agent.tcp_server import SolarAgentTCPServer
+        runner = SolarAgentTCPServer.run_solar_agent
     runner(port)
 
 

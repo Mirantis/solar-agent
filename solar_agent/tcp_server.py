@@ -34,27 +34,27 @@ import os
 from types import GeneratorType
 
 from solar_agent.logger import logger
-from solar_agent.core import SolardContext, SolardIface
+from solar_agent.core import SolarAgentContext, SolarAgentIface
 from solar_agent.tcp_core import *
 
 
 SERVER_BUFF = 4096
 
 
-class SolardTCPException(Exception):
+class SolarAgentTCPException(Exception):
     pass
 
 
-class ReadFailure(SolardTCPException):
+class ReadFailure(SolarAgentTCPException):
     pass
 
 
-class SolardTCPHandler(object):
+class SolarAgentTCPHandler(object):
 
     def __init__(self, sock, address):
         self.sock = sock
         self.address = address
-        self.ctx = SolardContext()
+        self.ctx = SolarAgentContext()
         self.auth = None
         self._wrote = False
         self.forked = False
@@ -191,7 +191,7 @@ class SolardTCPHandler(object):
             if not input_data:
                 return False
             method = input_data['m']
-            meth = getattr(SolardIface, method)
+            meth = getattr(SolarAgentIface, method)
             is_stream = input_data.get('s', False)
             logger.debug("Going to run %r", method)
             if is_stream:
@@ -252,12 +252,12 @@ class SolardTCPHandler(object):
             logger.exception("Got exception")
 
 
-class SolardReqHandler(BaseRequestHandler):
+class SolarAgentReqHandler(BaseRequestHandler):
 
     def handle(self):
         sock = self.request
         address = self.client_address
-        h = SolardTCPHandler(sock, address)
+        h = SolarAgentTCPHandler(sock, address)
         try:
             logger.debug("New from %s:%d" % address)
             auth_state = h.make_auth()
@@ -285,7 +285,7 @@ class SolardReqHandler(BaseRequestHandler):
                 os._exit(0)
 
 
-class SolardTCPServer(ThreadingTCPServer):
+class SolarAgentTCPServer(ThreadingTCPServer):
 
     allow_reuse_address = True
 
@@ -310,11 +310,11 @@ class SolardTCPServer(ThreadingTCPServer):
 
     @staticmethod
     def run_solar_agent(port):
-        s = SolardTCPServer(('0.0.0.0', port), SolardReqHandler)
+        s = SolarAgentTCPServer(('0.0.0.0', port), SolarAgentReqHandler)
         s.dummy_recycle_childs()
         return s.serve_forever()
 
 
 
 if __name__ == '__main__':
-    SolardTCPServer.run_solar_agent(5555)
+    SolarAgentTCPServer.run_solar_agent(5555)

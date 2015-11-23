@@ -39,7 +39,7 @@ class RemoteFailure(ClientException):
     pass
 
 
-class SolardTCPClient(object):
+class SolarAgentTCPClient(object):
 
     def __init__(self, host, port, **kwargs):
         self.host = host
