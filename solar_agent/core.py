@@ -21,7 +21,7 @@ import shlex
 from itertools import takewhile
 
 
-from solard.logger import logger
+from solar_agent.logger import logger
 
 
 # XXX: not used for now vvv
@@ -53,8 +53,8 @@ from solard.logger import logger
 #         try:
 #             return self._dirs[path]
 #         except KeyError:
-#             self._dirs[path] = solard_dir = SolardDir(self, path)
-#         return solard_dir
+#             self._dirs[path] = solar_agent_dir = SolardDir(self, path)
+#         return solar_agent_dir
 
 #     def is_safe_file(self, path):
 #         dirname = os.path.dirname(path)
@@ -186,7 +186,7 @@ class SolardFile(object):
 class SolardIface(object):
 
     @staticmethod
-    def run(solard_context, cmd, **kwargs):
+    def run(solar_agent_context, cmd, **kwargs):
         # return check_output(shlex.split(cmd))
         executor = fabric_api.local
         # if kwargs.get('use_sudo', False):
@@ -202,7 +202,7 @@ class SolardIface(object):
         if env:
             managers.append(fabric_api.shell_env(**kwargs['env']))
 
-        # we just warn, don't exit on solard
+        # we just warn, don't exit on solar_agent
         # correct data is returned
         managers.append(fabric_api.warn_only())
 
@@ -215,56 +215,56 @@ class SolardIface(object):
             return result
 
     @staticmethod
-    def copy_file(solard_context, stream_reader, path, size=None):
-        f = SolardIface.file_start(solard_context, path)
+    def copy_file(solar_agent_context, stream_reader, path, size=None):
+        f = SolardIface.file_start(solar_agent_context, path)
         rdr = stream_reader(size)
         for data in rdr:
             f.write(data)
-        SolardIface.file_end(solard_context, path)
+        SolardIface.file_end(solar_agent_context, path)
         return True
 
     @staticmethod
-    def copy_files(solard_context, stream_reader, paths, total_size):
+    def copy_files(solar_agent_context, stream_reader, paths, total_size):
         # total_size not used for now
         for _to, _size in paths:
             logger.debug("Starting %s size=%d", _to, _size)
-            f = SolardIface.file_start(solard_context, _to)
+            f = SolardIface.file_start(solar_agent_context, _to)
             if _size > 0:
                 rdr = stream_reader(_size)
                 for data in rdr:
                     f.write(data)
-            SolardIface.file_end(solard_context, _to)
+            SolardIface.file_end(solar_agent_context, _to)
             logger.debug("Done %s size=%d", _to, _size)
         return True
 
 
     # # TODO: not used YET fully
     # @staticmethod
-    # def dir_start(solard_context, path):
-    #     solard_dir = solard_context.dir(path)
-    #     solard_dir.start()
-    #     return solard_dir
+    # def dir_start(solar_agent_context, path):
+    #     solar_agent_dir = solar_agent_context.dir(path)
+    #     solar_agent_dir.start()
+    #     return solar_agent_dir
 
     # @staticmethod
-    # def dir_finish(solard_context, path):
-    #     solard_dir = solard_context.dir(path)
-    #     solard_dir.finish()
+    # def dir_finish(solar_agent_context, path):
+    #     solar_agent_dir = solar_agent_context.dir(path)
+    #     solar_agent_dir.finish()
     #     return True
 
     @staticmethod
-    def file_start(solard_context, path):
-        solard_file = solard_context.file(path)
-        solard_file.open()
-        return solard_file
+    def file_start(solar_agent_context, path):
+        solar_agent_file = solar_agent_context.file(path)
+        solar_agent_file.open()
+        return solar_agent_file
 
     @staticmethod
-    def file_put_data(solard_context, path, data):
-        solard_file = solard_context.file(path)
-        return solard_file.write(data)
+    def file_put_data(solar_agent_context, path, data):
+        solar_agent_file = solar_agent_context.file(path)
+        return solar_agent_file.write(data)
 
     @staticmethod
-    def file_end(solard_context, path):
-        solard_file = solard_context.file(path)
-        solard_file.finish()
+    def file_end(solar_agent_context, path):
+        solar_agent_file = solar_agent_context.file(path)
+        solar_agent_file.finish()
         return True
 

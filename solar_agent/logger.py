@@ -15,7 +15,7 @@ import logging
 
 
 def __setup_logger():
-    logger = logging.getLogger("solard")
+    logger = logging.getLogger("solar_agent")
     logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(funcName)s (%(filename)s::%(lineno)s)::%(message)s')
     stream = logging.StreamHandler()

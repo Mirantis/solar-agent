@@ -11,7 +11,7 @@ class SolardClient(object):
 
     def __init__(self, auth, transport_args, transport_class=None):
         if transport_class is None:
-            from solard.tcp_client import SolardTCPClient
+            from solar_agent.tcp_client import SolardTCPClient
             transport_class = SolardTCPClient
         self.auth = auth
         self.sudo_transport = transport_class(*transport_args)
@@ -98,7 +98,7 @@ class SolardClient(object):
 
 if __name__ == '__main__':
     import time
-    from solard.tcp_client import SolardTCPClient
+    from solar_agent.tcp_client import SolardTCPClient
     c = SolardClient(auth={'user': 'vagrant', 'auth': 'password'}, transport_args=('10.0.0.3', 5555), transport_class=SolardTCPClient)
     print c.run('hostname')
     print c.run('whoami')

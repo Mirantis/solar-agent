@@ -17,7 +17,7 @@ import socket
 import errno
 import struct
 
-from solard.tcp_core import *
+from solar_agent.tcp_core import *
 
 
 CLIENT_BUFF = 4096

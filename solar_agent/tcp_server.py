@@ -33,9 +33,9 @@ import os
 
 from types import GeneratorType
 
-from solard.logger import logger
-from solard.core import SolardContext, SolardIface
-from solard.tcp_core import *
+from solar_agent.logger import logger
+from solar_agent.core import SolardContext, SolardIface
+from solar_agent.tcp_core import *
 
 
 SERVER_BUFF = 4096
@@ -309,7 +309,7 @@ class SolardTCPServer(ThreadingTCPServer):
         th.start()
 
     @staticmethod
-    def run_solard(port):
+    def run_solar_agent(port):
         s = SolardTCPServer(('0.0.0.0', port), SolardReqHandler)
         s.dummy_recycle_childs()
         return s.serve_forever()
@@ -317,4 +317,4 @@ class SolardTCPServer(ThreadingTCPServer):
 
 
 if __name__ == '__main__':
-    SolardTCPServer.run_solard(5555)
+    SolardTCPServer.run_solar_agent(5555)

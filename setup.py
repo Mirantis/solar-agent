@@ -26,7 +26,7 @@ def find_requires():
 
 
 setup(
-    name='solard',
+    name='solar_agent',
     version='0.0.1',
     description='Deployment tool daemon',
     long_description="""Deployment tool daemon""",
@@ -47,5 +47,5 @@ setup(
     include_package_data=True,
     entry_points={
           'console_scripts':
-        ['solard = solard.server:cli']}
+        ['solar_agent = solar_agent.server:cli']}
 )
