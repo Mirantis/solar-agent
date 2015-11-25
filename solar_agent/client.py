@@ -41,12 +41,13 @@ class SolarAgentClient(object):
         # dir should open context on remote, and sync all files as one req/resp
         to_cp_files = []
         transport = self.transport(use_sudo)
+        rest, last_dir_name = _from.rsplit(os.path.sep, 1)
         for root, _, files in os.walk(_from):
             for name in files:
                 single_from = os.path.join(root, name)
-                _to = os.path.join(root.replace(single_from, _to), name)
+                final_path = single_from.replace(rest, _to)
                 size = os.stat(single_from).st_size
-                to_cp_files.append((single_from, _to, size))
+                to_cp_files.append((single_from, final_path, size))
         tos = [(x[1], x[2]) for x in to_cp_files]
         total_size = sum((x[1] for x in tos))
         data = {'m': 'copy_files',
